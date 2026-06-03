@@ -3,15 +3,25 @@
  *
  * Change Logs:
  * Date           Author           Notes
- * 2025-06-18     Bai Jiankang     Initial 
+ * 2025-06-18     Bai Jiankang     Initial
  */
- 
+
 #ifndef APPLICATIONS_UART_H_
 #define APPLICATIONS_UART_H_
 
 #include "main.h"
 
-// 接收数据类型枚举
+#define CONCAT2(a, b)  a ## b
+#define CONCAT(a, b)   CONCAT2(a, b)
+
+// --- UART selection: change to any USART number ---
+#define UART_SEL  1
+// --------------------------------------------------
+
+#define HUART             CONCAT(huart,    UART_SEL)
+#define UART_PROCESS      CONCAT(uart,     CONCAT(UART_SEL, _process_char))
+#define UART_CALLBACK     CONCAT(user_uart, CONCAT(UART_SEL, _callback))
+
 typedef enum
 {
     NUMBER = 0,
@@ -19,13 +29,12 @@ typedef enum
     NULL_TYPE
 } recv_type_t;
 
-// 外部全局变量声明
-extern recv_type_t g_type_of_recv_uart2;
-extern unsigned char g_received_finished_uart2;
-extern float g_received_float_uart2;
-extern char g_received_string_uart2[40];
+extern recv_type_t g_type_of_recv;
+extern unsigned char g_received_finished;
+extern float g_received_float;
+extern char g_received_string[40];
 
 void uart_putstring(UART_HandleTypeDef *huart, const char *str);
-void uart2_process_char(char recv_char);
+void UART_PROCESS(char recv_char);
 
 #endif /* APPLICATIONS_UART_H_ */
